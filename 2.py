@@ -1,1 +1,2 @@
-hello 2.py
+print('hello 2.py')
+

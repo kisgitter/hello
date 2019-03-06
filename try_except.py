@@ -4,6 +4,8 @@ try:
         raise ValueError('当然这是不可能的了哈哈哈')
     r = 10 / int('a')
     print('result:', r)
+except Exception as e:
+    print('Exception:',e)
 except  (ValueError,TypeError) as e:
     print('ValueError:', e)
 except ZeroDivisionError as e:

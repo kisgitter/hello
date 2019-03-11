@@ -1,2 +1,13 @@
 1、列举常见的python模块
-
+   re 正则表达式  functo
+2、Python内置类型
+   str，int，float，tuple，list，dict，set
+3、求list A与list B的相同元素和不同元素
+   A、B 中相同元素：print(set(A)&set(B))
+   A、B 中不同元素：print(set(A)^set(B))
+4、交换两个变量值
+   a,b = b,a
+5、说明一下os.path 和sys.path 分别代表什么？
+   os.path 主要是用于用户对系统路径文件的操作
+   sys.path 主要用户对Python 解释器的系统环境参数的操作
+6、

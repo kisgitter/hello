@@ -1,0 +1,148 @@
+初始化一个Git仓库，使用git init命令
+git add xxx.txt // git add yyy.txt zzz.txt
+git commit -m'xxx'
+git status
+git diff xxx.txt
+git log(--pretty=oneline)
+git reset --hard HEAD^/HEAD^^/HEAD~100
+git reset --hard 1094a #版本前几个字母
+git reflog
+git checkout -- xxx.txt
+git reset HEAD xxx.txt
+
+git远程仓库
+
+准备工作
+第1步：创建SSH Key。在用户主目录下，是否有.ssh目录，如有，再看该目录下是否有id_rsa和id_rsa.pub这两个文件，如果有，下一步。如果没有，打开Shell创建SSH Key：
+$ ssh-keygen -t rsa -C "dwjwlnc@sina.com"
+第2步：登陆GitHub，打开“Account settings”，“SSH Keys”页面：
+然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容：
+
+github创建远程仓库
+1、登录github创建样例learngit
+2、本地仓库输入命令：
+   $ git remote add origin git@github.com:kisgitter/learngit.git 关联远程仓库
+3、初次推送本地库到远程库：
+   $ git push -u origin master  注释：origin是git默认叫法，也可以改为别的
+4、以后推送命令：
+   $ git push origin master
+   
+从远程仓库克隆
+1、github创建远程仓库gitskills，勾选Initialize this repository with a README
+2、本地输入命令 git clone git@github.com:michaelliao/gitskills.git，在当前目录克隆出来一个gitkills仓库
+注释：Git支持多种协议，包括https，但通过ssh支持的原生git协议速度最快
+
+
+git分支管理
+1、创建并切换到dev分支：
+   $ git checkout -b dev  
+   注释：-b表示创建并切换，等价于 $ git branch dev + $ git checkout dev
+2、查看所有分支
+   $ git branch
+   结果为* dev master 带*是当前分支
+3、正常创建文件提交
+4、dev分支工作完成，切换回主分支
+   $ git checkout master
+5、把dev分支成果合并到master
+   $ git merge dev
+   注释：此合并为Fast-forward，快进模式
+6、合并完成，删除dev分支
+   $ git branch -d dev
+
+git解决冲突
+冲突产生的原因，如，在feature1上修改了A文件提交，在master下又修改了文件提交，将feature1合并到master上就会发生冲突
+1、冲突解决方法
+找到冲突文件并打开，将冲突内容合并，删除m
+
+gitBUG分支
+1、$ git stash保存现场
+2、确定在哪个分支上修复bug，如在master分支上修复，从master创建临时分支
+   $ git checkout master
+   $ git checkout -b issue-101
+3、修复bug，提交
+4、切换回master分支，并完成合并，最后删除issue-101分支
+   $ git checkout master
+   $ git merge --no-ff -m "merged bug fix 101" issue-101
+5、切换回dev分支：$ git checkout dev,查看工作现场：$ git stash list，然后申请恢复现场有两种方法：
+   一、$ git stash apply恢复，恢复后，stash内容并不删除，需要git stash drop来删除;
+   二、$ git stash pop，恢复的同时把stash内容也删了
+   
+gitFeature分支
+开发一个新feature，最好新建一个分支；
+如果要丢弃一个有提交但是没有被合并过的分支，可以通过git branch -D Feature强行删除
+
+git多人协作
+1、当从远程仓库克隆时，实际上Git自动把本地的master分支和远程的master分支对应起来了，远程仓库的默认名称是origin
+   $ git remote 查看远程库的信息
+   $ git remote -v 查看远程库详细信息
+2、推送分支
+   $ git push origin master 推送主分支
+   $ git push origin master 推送开发dev分支
+   。。。。。。
+   分支可以藏于本地，也可以推送远程，完全看自己需要
+3、抓取分支
+   i、多人协作时，大家都会往master和dev分支上推送各自的修改，现在使用另一台电脑进行克隆：
+   $ git clone git@github.com:michaelliao/learngit.git
+   ii、默认情况下，这台电脑只能看到本地的master分支。现在要在dev分支上开发，就必须创建origin的dev分支到本地
+   $ git checkout -b dev origin/dev
+   此时就可以push本地仓库到远程库origin/dev
+   iii、如果你的文件和远程库有冲突，先用git pull把最新的提交从origin/dev抓下来，在本地合并，解决冲突，再推送
+   $ git pull抓取如果提示no tracking information 就先建立链接:
+   $ git branch --set-upstream-to=origin/dev dev //指定本地dev分支与远程origin/dev分支的链接
+   再$ git pull
+   iv、pull成功后本地解决冲突后push
+gitRebase
+1、Git有一种称为rebase的操作，有人把它翻译成“变基”
+gitb标签管理
+发布一个版本时，通常先在版本库中打一个标签（tag），这样，就唯一确定了打标签时刻的版本，它就是指向某个commit的指针
+1、创建标签：
+  i、切换到需要打标签的分支上，敲命令一个新标签：
+  $ git tag v1.0
+  查看所有标签
+  $ git tag
+  默认标签是打在最新提交的commit
+  ii、如果要打标签到历史提交上
+  先找到历史提交的commit id
+  $ git log --pretty=oneline --abbrev-commit
+  再打标签到历史commit Id上
+  $ git tag v0.9 f52c633
+  查看标签信息
+  $ git show v0.9
+  还可以创建带有说明的标签，用-a指定标签名，-m指定说明文字：
+  git tag -a v0.1 -m "version 0.1 released" 1094adb
+2、操作标签
+  i、删除标签
+  $ git tag -d v0.1
+  ii、推送标签
+  标签只存储在本地，不自动推送到远程。推送单个标签
+  $ git push origin v1.0
+  一次性推送全部尚未推送到远程的本地标签
+  $ git push origin --tags
+  iii、删除远程标签
+  先删除本地标签
+  $ git tag -d v0.9
+  然后远程删除
+  $ git push origin :refs/tags/v0.9
+   
+
+
+
+git checkout -b dev (git branch dev 加 git checkout dev)
+git branch
+git checkout master
+git merge dev
+git branch -d dev
+git log --graph
+git merge --no-ff -m "merge with no-ff" dev
+git stash
+git stash list
+git stash apply
+git stash drop
+git stash pop
+git branch -D feature-vulcan
+git remote(-v)
+git tag v1.0
+git tag
+git tag v0.9 f52c633
+git show v0.9
+git tag -a <tagname> -m "blablabla..."

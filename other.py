@@ -15,3 +15,16 @@ e = random.shuffle(list(range(1,100)))#打乱列表
 f = random.randrange(1,20,2) #从1到20按照基数2递增选取数字
 g = random.sample(list(range(1,100)),4) #从指定序列1,100，获取长度为4的序列并随机排序
 
+#3python性能测试
+from time import clock,sleep
+def xingnengceshi(func):
+    def wrapper(*args,**kwargs):
+        start = clock()
+        result = func(*args,**kwargs)
+        end = clock()
+        print( end - start)
+        return result
+    return wrapper
+
+
+

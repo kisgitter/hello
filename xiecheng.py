@@ -1,7 +1,7 @@
 def consumer():
     r = ''
     while True:
-        m = yield r #yield r 输出 r ,上一次执行到yield r 终止，再次开启从 m 开始，同时m的值等于produce中发送过来的n
+        m = yield r #yield r 返回 r ,上一次执行到yield r 终止，再次开启从 m 开始，同时m的值等于produce中发送过来的n
         if not m:
             return
         print('[CONSUMER] Consuming %s...' % m)
